@@ -37,8 +37,13 @@ namespace Server
                         stringBuilder.Append(Encoding.Unicode.GetString(data, 0, bytes));
                     } while (socketClient.Available > 0);
 
-                    Console.WriteLine($"MSG: {stringBuilder.ToString()}");
+                    string nums = stringBuilder.ToString();
+                    string[] numsString = nums.Split(' ');
+                    int res = int.Parse(numsString[0]) + int.Parse(numsString[1]);
 
+                    //string outpit = $"Result {"
+                    Console.WriteLine($"MSG: {stringBuilder.ToString()}");
+                    
 
                     socketClient.Shutdown(SocketShutdown.Both);
                     socketClient.Close();
