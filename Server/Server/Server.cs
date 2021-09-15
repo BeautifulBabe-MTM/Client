@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
@@ -24,18 +25,27 @@ namespace Server
                 {
                     Socket socketClient = socket.Accept();
 
-
-
-
                     int bytes = 0;
                     byte[] data = new byte[256];
+
 
                     do
                     {
                         bytes = socketClient.Receive(data);
                     } while (socketClient.Available > 0);
+                    socketClient.Send(Encoding.Unicode.GetBytes("GOOD"));
+                    bytes = 0; data = new byte[256];
+                    List<byte> size = new List<byte>();
+                    do
+                    {
+                        bytes = socketClient.Receive(data);
+                        size.AddRange(data);
 
-                    File.WriteAllBytes("less.txt" ,data);
+                    } while (socketClient.Available > 0);
+
+                    File.WriteAllBytes("less.txt", data);
+
+                    File.WriteAllBytes("tolik.jpg", size.ToArray());
 
                     socketClient.Shutdown(SocketShutdown.Both);
                     socketClient.Close();
@@ -43,7 +53,6 @@ namespace Server
             }
             catch (Exception ex)
             {
-
                 Console.WriteLine(ex.Message);
             }
         }
